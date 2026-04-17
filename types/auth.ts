@@ -50,10 +50,9 @@ export const registerPayloadSchema = z.object({
 
 export const registerFormSchema = registerPayloadSchema
   .extend({
-    confirmPassword: z.string().min(
-      1,
-      VALIDATION_MESSAGES.confirmPasswordRequired,
-    ),
+    confirmPassword: z
+      .string()
+      .min(1, VALIDATION_MESSAGES.confirmPasswordRequired),
   })
   .refine((values) => values.password === values.confirmPassword, {
     message: VALIDATION_MESSAGES.passwordMismatch,

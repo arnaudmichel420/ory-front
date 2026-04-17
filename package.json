@@ -8,6 +8,7 @@
     "ios": "expo start -c --ios",
     "web": "expo start -c --web",
     "clean": "rm -rf .expo node_modules",
+    "lint": "eslint . --config eslint.config.mts",
     "format": "npx prettier . --write"
   },
   "dependencies": {

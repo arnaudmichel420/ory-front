@@ -7,9 +7,7 @@ import {
   type ToastConfig,
 } from "react-native-toast-message";
 
-function SuccessToast(
-  props: React.ComponentProps<typeof BaseToast>,
-) {
+function SuccessToast(props: React.ComponentProps<typeof BaseToast>) {
   const { colorScheme } = useColorScheme();
   const theme = THEME[colorScheme ?? "light"];
 
@@ -38,9 +36,7 @@ function SuccessToast(
   );
 }
 
-function DestructiveToast(
-  props: React.ComponentProps<typeof ErrorToast>,
-) {
+function DestructiveToast(props: React.ComponentProps<typeof ErrorToast>) {
   const { colorScheme } = useColorScheme();
   const theme = THEME[colorScheme ?? "light"];
 
@@ -69,9 +65,7 @@ function DestructiveToast(
   );
 }
 
-function DefaultInfoToast(
-  props: React.ComponentProps<typeof InfoToast>,
-) {
+function DefaultInfoToast(props: React.ComponentProps<typeof InfoToast>) {
   const { colorScheme } = useColorScheme();
   const theme = THEME[colorScheme ?? "light"];
 

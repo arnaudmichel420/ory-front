@@ -4,13 +4,11 @@ import {
   loginResponseSchema,
   meResponseSchema,
   type RegisterPayload,
-  registerResponseSchema
+  registerResponseSchema,
 } from "@/types/auth";
 
 export const apiLogin = async (payload: LoginPayload) => {
-  const response = await api
-    .post("api/auth/login", { json: payload })
-    .json();
+  const response = await api.post("api/auth/login", { json: payload }).json();
 
   return loginResponseSchema.parse(response);
 };
