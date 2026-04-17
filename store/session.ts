@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { createSelectors } from "@/store/create-selectors";
 import { getItem, removeItem, setItem } from "@/lib/storage";
 
-const AUTH_TOKEN_KEY = "auth_token";
+export const AUTH_TOKEN_KEY = "auth_token";
 
 type SessionState = {
   hasBootstrapped: boolean;

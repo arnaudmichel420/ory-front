@@ -1,28 +1,48 @@
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
 import { useSessionStore } from "@/store/session";
-import { Redirect } from "expo-router";
+import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View } from "react-native";
 
 export default function AccountScreen() {
-  const hasBootstrapped = useSessionStore.use.hasBootstrapped();
-  const isAuthenticated = useSessionStore.use.isAuthenticated();
+  const signOut = useSessionStore.use.signOut();
 
-  if (!hasBootstrapped) {
-    return (
-      <SafeAreaView className="flex-1 bg-background">
-        <View className="flex-1 items-center justify-center px-6">
-          <Text className="text-muted-foreground">
-            Preparation de votre espace...
-          </Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return <Redirect href="/login" />;
-  }
-
-  return <Redirect href="/account-home" />;
+  return (
+    <SafeAreaView className="flex-1 bg-background">
+      <ScrollView
+        className="flex-1"
+        contentContainerClassName="px-6 py-6"
+        showsVerticalScrollIndicator={false}
+      >
+        <Card>
+          <CardHeader>
+            <CardTitle>Mon compte</CardTitle>
+            <CardDescription className="leading-6">
+              Ecran protege de demonstration. Tant que la session mockee est
+              active, cette page est accessible.
+            </CardDescription>
+          </CardHeader>
+          <CardContent />
+          <CardFooter>
+            <Button
+              onPress={() => {
+                void signOut();
+              }}
+              className="w-full rounded-xl"
+            >
+              <Text>Se deconnecter</Text>
+            </Button>
+          </CardFooter>
+        </Card>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }

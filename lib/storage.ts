@@ -9,7 +9,8 @@ export async function getItem(key: string) {
 }
 export async function setItem(key: string, value: string) {
   if (Platform.OS === "web") {
-    return localStorage.set(key, value);
+    localStorage.setItem(key, value);
+    return;
   }
   return SecureStore.setItemAsync(key, value);
 }

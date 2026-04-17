@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
+import { ROUTES } from "@/lib/routes";
 import { Link } from "expo-router";
 import {
   ShieldCheckIcon,
@@ -61,12 +62,12 @@ export default function HomeScreen() {
             visuels pour la connexion et l&apos;inscription.
           </Text>
           <View className="mt-6 flex-row gap-3">
-            <Link href="/login" asChild>
+            <Link href={ROUTES.login} asChild>
               <Button className="flex-1 bg-background">
                 <Text className="text-foreground">Se connecter</Text>
               </Button>
             </Link>
-            <Link href="/register" asChild>
+            <Link href={ROUTES.register} asChild>
               <Button
                 variant="outline"
                 className="flex-1 border-primary-foreground/30 bg-transparent"

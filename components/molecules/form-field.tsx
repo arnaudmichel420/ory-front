@@ -8,6 +8,7 @@ import { View } from "react-native";
 type FormFieldProps = React.ComponentProps<typeof Input> & {
   label: string;
   description?: string;
+  errorMessage?: string;
   containerClassName?: string;
   inputClassName?: string;
 };
@@ -15,6 +16,7 @@ type FormFieldProps = React.ComponentProps<typeof Input> & {
 function FormField({
   label,
   description,
+  errorMessage,
   containerClassName,
   inputClassName,
   ...props
@@ -23,7 +25,9 @@ function FormField({
     <View className={cn("gap-2", containerClassName)}>
       <Label>{label}</Label>
       <Input className={inputClassName} {...props} />
-      {description ? (
+      {errorMessage ? (
+        <Text className="text-sm text-destructive">{errorMessage}</Text>
+      ) : description ? (
         <Text className="text-sm text-muted-foreground">{description}</Text>
       ) : null}
     </View>

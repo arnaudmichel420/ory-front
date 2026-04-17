@@ -1,4 +1,5 @@
 import { Text } from "@/components/ui/text";
+import { ROUTES } from "@/lib/routes";
 import { useSessionStore } from "@/store/session";
 import { Redirect } from "expo-router";
 import { View } from "react-native";
@@ -18,8 +19,8 @@ export default function Index() {
   }
 
   if (!isAuthenticated) {
-    return <Redirect href="/login" />;
+    return <Redirect href={ROUTES.login} />;
   }
 
-  return <Redirect href="/home" />;
+  return <Redirect href={ROUTES.home} />;
 }
