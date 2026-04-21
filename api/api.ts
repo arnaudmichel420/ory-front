@@ -1,6 +1,14 @@
+import { isTokenValid } from "@/lib/auth-token";
 import { getItem } from "@/lib/storage";
-import { AUTH_TOKEN_KEY } from "@/store/session";
+import { ROUTES } from "@/lib/routes";
+import { AUTH_TOKEN_KEY, useSessionStore } from "@/store/session";
+import { router } from "expo-router";
 import ky from "ky";
+
+async function handleInvalidToken() {
+  await useSessionStore.getState().signOut();
+  router.replace(ROUTES.root);
+}
 
 const api = ky.create({
   prefix: process.env.EXPO_PUBLIC_API_URL ?? "",
@@ -8,6 +16,11 @@ const api = ky.create({
     beforeRequest: [
       async ({ request }) => {
         const token = await getItem(AUTH_TOKEN_KEY);
+
+        if (token && !isTokenValid(token)) {
+          await handleInvalidToken();
+          throw new Error("Session expiree");
+        }
 
         if (token) {
           request.headers.set("Authorization", `Bearer ${token}`);
