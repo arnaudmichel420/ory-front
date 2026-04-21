@@ -17,15 +17,6 @@ export const metierListQuerySchema = z.object({
   emploiCadre: z.boolean().optional(),
 });
 
-export const metierListItemSchema = z.object({
-  codeOgr: z.string().min(1),
-  codeRome: z.string().min(1),
-  libelle: z.string().min(1),
-  transitionEco: z.boolean().nullable(),
-  transitionNum: z.boolean().nullable(),
-  emploiCadre: z.boolean().nullable(),
-});
-
 export const sousDomaineSchema = z.object({
   id: z.number().int(),
   code: z.string().min(1),
@@ -42,6 +33,17 @@ export const metierSecteurSchema = z.object({
   id: z.number().int(),
   secteur: secteurSchema,
   principal: z.boolean().nullable(),
+});
+
+export const metierListItemSchema = z.object({
+  codeOgr: z.string().min(1),
+  codeRome: z.string().min(1),
+  libelle: z.string().min(1),
+  description: z.string().nullable(),
+  transitionEco: z.boolean().nullable(),
+  transitionNum: z.boolean().nullable(),
+  emploiCadre: z.boolean().nullable(),
+  secteurs: z.array(metierSecteurSchema),
 });
 
 export const competenceSchema = z.object({
@@ -77,7 +79,6 @@ export const metierDetailSchema = metierListItemSchema.extend({
   accesMetier: z.string().nullable(),
   emploiReglemente: z.boolean().nullable(),
   sousDomaine: sousDomaineSchema.nullable(),
-  secteurs: z.array(metierSecteurSchema),
   contextesTravail: z.array(metierContexteTravailSchema),
   competences: z.array(metierCompetenceSchema),
 });
