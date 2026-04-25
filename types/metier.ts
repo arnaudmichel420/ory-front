@@ -37,13 +37,19 @@ export const metierSecteurSchema = z.object({
 
 export const metierListItemSchema = z.object({
   codeOgr: z.string().min(1),
-  codeRome: z.string().min(1),
+  codeRome: z.string().min(1).optional(),
   libelle: z.string().min(1),
-  description: z.string().nullable(),
-  transitionEco: z.boolean().nullable(),
-  transitionNum: z.boolean().nullable(),
-  emploiCadre: z.boolean().nullable(),
-  secteurs: z.array(metierSecteurSchema),
+  description: z.string().nullable().optional(),
+  transitionEco: z.boolean().nullable().optional(),
+  transitionNum: z.boolean().nullable().optional(),
+  emploiCadre: z.boolean().nullable().optional(),
+  saved: z.boolean().optional().default(false),
+  secteurs: z.array(metierSecteurSchema).optional().default([]),
+});
+
+export const metierSavedListQuerySchema = z.object({
+  page: z.number().int().positive().optional(),
+  limit: z.number().int().positive().max(100).optional(),
 });
 
 export const competenceSchema = z.object({
@@ -86,9 +92,14 @@ export const metierDetailSchema = metierListItemSchema.extend({
 export const metierListResponseSchema =
   createPaginatedResponseSchema(metierListItemSchema);
 
+export const metierSaveToggleResponseSchema = z.object({
+  saved: z.boolean(),
+});
+
 export type MetierSort = z.infer<typeof metierSortSchema>;
 export type MetierListQuery = z.infer<typeof metierListQuerySchema>;
 export type MetierListItem = z.infer<typeof metierListItemSchema>;
+export type MetierSavedListQuery = z.infer<typeof metierSavedListQuerySchema>;
 export type SousDomaine = z.infer<typeof sousDomaineSchema>;
 export type Secteur = z.infer<typeof secteurSchema>;
 export type MetierSecteur = z.infer<typeof metierSecteurSchema>;
@@ -100,3 +111,6 @@ export type MetierContexteTravail = z.infer<
 >;
 export type MetierDetail = z.infer<typeof metierDetailSchema>;
 export type MetierListResponse = PaginatedResponse<MetierListItem>;
+export type MetierSaveToggleResponse = z.infer<
+  typeof metierSaveToggleResponseSchema
+>;

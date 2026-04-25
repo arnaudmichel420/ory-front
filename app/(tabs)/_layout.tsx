@@ -1,12 +1,18 @@
 import { Icon } from "@/components/ui/icon";
 import { NAV_THEME } from "@/lib/theme";
 import { Tabs } from "expo-router";
-import { HouseIcon, SearchIcon, UserIcon } from "lucide-react-native";
+import {
+  HeartIcon,
+  HouseIcon,
+  SearchIcon,
+  UserIcon,
+} from "lucide-react-native";
 import { useColorScheme } from "nativewind";
 
 const TAB_ICONS = {
   home: HouseIcon,
   metier: SearchIcon,
+  favoris: HeartIcon,
   account: UserIcon,
 };
 
@@ -52,6 +58,13 @@ export default function TabsLayout() {
         options={{
           title: "Metiers",
           tabBarLabel: "Metiers",
+        }}
+      />
+      <Tabs.Screen
+        name="favoris"
+        options={{
+          title: "Favoris",
+          tabBarLabel: "Favoris",
         }}
       />
       <Tabs.Screen
