@@ -109,6 +109,7 @@ function MetierSaveButton({
       }
 
       void queryClient.invalidateQueries({ queryKey: ["metiers"] });
+      void queryClient.invalidateQueries({ queryKey: ["metiers", "saved"] });
     },
     onError: async (error, _variables, context) => {
       const previousSaved = context?.previousSaved ?? initialSaved;

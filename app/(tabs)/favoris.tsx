@@ -84,9 +84,7 @@ export default function FavorisScreen() {
             </Text>
           ) : null
         }
-        renderItem={({ item }) => (
-          <MetierListItemCard metier={item} savedOverride />
-        )}
+        renderItem={({ item }) => <MetierListItemCard metier={item} />}
       />
     </SafeAreaView>
   );
