@@ -1,101 +1,75 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Icon } from "@/components/ui/icon";
-import { Text } from "@/components/ui/text";
-import { ROUTES } from "@/lib/routes";
-import { Link } from "expo-router";
-import {
-  ShieldCheckIcon,
-  SparklesIcon,
-  WalletCardsIcon,
-} from "lucide-react-native";
-import { ScrollView, View } from "react-native";
+/* eslint-disable react/no-unknown-property */
+import { OrbitControls } from "@react-three/drei/native";
+import { Canvas, useFrame } from "@react-three/fiber/native";
+import { Suspense, useRef } from "react";
+import { useWindowDimensions, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { type Mesh } from "three";
 
-const FEATURES = [
-  {
-    title: "Connexion ultra rapide",
-    description:
-      "Un parcours simple, pensé mobile, avec des écrans lisibles et rassurants.",
-    icon: ShieldCheckIcon,
-  },
-  {
-    title: "Création de compte claire",
-    description:
-      "Une structure en cartes avec des champs bien espacés pour une maquette propre.",
-    icon: WalletCardsIcon,
-  },
-  {
-    title: "Style cohérent",
-    description:
-      "Palette douce, composants réutilisables et navigation basse prête à brancher.",
-    icon: SparklesIcon,
-  },
-];
+function RedCube() {
+  const cubeRef = useRef<Mesh>(null);
+
+  useFrame((_, delta) => {
+    if (!cubeRef.current) {
+      return;
+    }
+
+    cubeRef.current.rotation.x += delta * 0.6;
+    cubeRef.current.rotation.y += delta * 0.8;
+  });
+
+  return (
+    <mesh ref={cubeRef}>
+      <boxGeometry args={[1.6, 1.6, 1.6]} />
+      <meshBasicMaterial color="#ef1d25" />
+    </mesh>
+  );
+}
 
 export default function HomeScreen() {
-  return (
-    <SafeAreaView className="flex-1 bg-background">
-      <ScrollView
-        className="flex-1"
-        contentContainerClassName="px-6 pb-8 pt-4"
-        showsVerticalScrollIndicator={false}
-      >
-        <View className="rounded-[28px] bg-primary px-6 py-7">
-          <Text className="text-sm font-semibold uppercase tracking-[2px] text-primary-foreground/70">
-            Ory Front
-          </Text>
-          <Text
-            variant="h1"
-            className="mt-4 text-left text-3xl text-primary-foreground"
-          >
-            Une base de maquettes auth prêtes a brancher.
-          </Text>
-          <Text className="mt-4 text-base leading-6 text-primary-foreground/80">
-            Trois onglets en bas, un ecran d&apos;accueil et deux parcours
-            visuels pour la connexion et l&apos;inscription.
-          </Text>
-          <View className="mt-6 flex-row gap-3">
-            <Link href={ROUTES.login} asChild>
-              <Button className="flex-1 bg-background">
-                <Text className="text-foreground">Se connecter</Text>
-              </Button>
-            </Link>
-            <Link href={ROUTES.register} asChild>
-              <Button
-                variant="outline"
-                className="flex-1 border-primary-foreground/30 bg-transparent"
-              >
-                <Text className="text-primary-foreground">Creer un compte</Text>
-              </Button>
-            </Link>
-          </View>
-        </View>
+  const { width, height } = useWindowDimensions();
 
-        <View className="mt-6 gap-4">
-          {FEATURES.map(({ title, description, icon: FeatureIcon }) => (
-            <Card key={title} className="rounded-[24px]">
-              <CardHeader className="gap-0">
-                <View className="mb-4 h-12 w-12 items-center justify-center rounded-2xl bg-secondary">
-                  <Icon as={FeatureIcon} size={22} />
-                </View>
-                <CardTitle>{title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="leading-6">
-                  {description}
-                </CardDescription>
-              </CardContent>
-            </Card>
-          ))}
-        </View>
-      </ScrollView>
+  return (
+    <SafeAreaView className="flex-1 bg-[#101066]">
+      <View style={{ flex: 1, backgroundColor: "#101066" }}>
+        <Canvas
+          camera={{ position: [3, 2.4, 4], fov: 45 }}
+          gl={{ antialias: false, alpha: false }}
+          onCreated={({ gl }) => {
+            gl.setClearColor("#101066", 1);
+            console.log("R3F Canvas created on native");
+          }}
+          style={{
+            width,
+            height,
+            backgroundColor: "#101066",
+          }}
+        >
+          <color attach="background" args={["#101066"]} />
+          <Suspense fallback={null}>
+            <RedCube />
+            {/*
+              Boilerplate modele Draco:
+
+              1. Ajoute ton fichier dans assets/models/mon-modele.glb
+              2. Importe le composant:
+                 import { DracoModel } from "@/components/three/draco-model";
+              3. Remplace le cube par:
+                 <DracoModel source={require("@/assets/models/mon-modele.glb")} />
+
+              Si tu utilises un decodeur Draco local, passe aussi:
+                 dracoDecoderPath="/assets/draco/"
+            */}
+          </Suspense>
+          <OrbitControls
+            enableDamping
+            dampingFactor={0.08}
+            enablePan={false}
+            minDistance={2.5}
+            maxDistance={8}
+          />
+        </Canvas>
+      </View>
     </SafeAreaView>
   );
 }

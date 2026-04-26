@@ -109,7 +109,7 @@ function SecteurSelect({
   return (
     <>
       <Pressable
-        className="min-h-10 flex-row items-center justify-between gap-3 rounded-md border border-input bg-background px-3 py-2 shadow-sm shadow-black/5"
+        className="min-h-10 flex-row items-center justify-between gap-3 rounded-md border border-input bg-background px-3 py-2"
         onPress={() => setOpen(true)}
       >
         <Text className="flex-1 text-sm" numberOfLines={1}>

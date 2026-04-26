@@ -22,7 +22,7 @@ function Switch({ className, checked, disabled, ...props }: SwitchProps) {
     >
       <SwitchPrimitive.Thumb
         className={cn(
-          "h-5 w-5 rounded-full bg-background shadow-sm shadow-black/20",
+          "h-5 w-5 rounded-full bg-background",
           checked && "translate-x-5",
           Platform.select({ web: "transition-transform" }),
         )}
