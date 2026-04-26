@@ -94,7 +94,7 @@ function getActiveFilterCount(filters: MetierFilters) {
 
 function sortSecteurs(secteurs: Secteur[]) {
   return [...secteurs].sort((secteurA, secteurB) =>
-    secteurA.libelle.localeCompare(secteurB.libelle),
+    (secteurA.libelle ?? "").localeCompare(secteurB.libelle ?? ""),
   );
 }
 

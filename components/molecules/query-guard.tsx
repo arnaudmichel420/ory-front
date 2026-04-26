@@ -1,3 +1,4 @@
+import { getQueryErrorMessage } from "@/lib/get-query-error-message";
 import { Text } from "@/components/ui/text";
 import { ActivityIndicator, View } from "react-native";
 
@@ -12,14 +13,6 @@ type QueryGuardProps = React.PropsWithChildren<{
   errorMessage?: string;
   className?: string;
 }>;
-
-function getQueryErrorMessage(error: unknown, fallbackMessage: string) {
-  if (error instanceof Error && error.message) {
-    return error.message;
-  }
-
-  return fallbackMessage;
-}
 
 function QueryGuard({
   children,

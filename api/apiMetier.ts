@@ -3,6 +3,10 @@ import { createSearchParams } from "@/lib/search-params";
 import {
   type MetierDetail,
   metierDetailSchema,
+  type MetierInteractionPayload,
+  type MetierInteractionResponse,
+  metierInteractionPayloadSchema,
+  metierInteractionResponseSchema,
   type MetierListQuery,
   type MetierListResponse,
   metierListResponseSchema,
@@ -63,4 +67,17 @@ export const apiToggleSaveMetier = async (
   const response = await api.post(`api/metiers/${codeOgr}/save`).json();
 
   return metierSaveToggleResponseSchema.parse(response);
+};
+
+export const apiCreateMetierInteraction = async (
+  codeOgr: string,
+  payload: MetierInteractionPayload,
+): Promise<MetierInteractionResponse> => {
+  const response = await api
+    .post(`api/metiers/${codeOgr}/interactions`, {
+      json: metierInteractionPayloadSchema.parse(payload),
+    })
+    .json();
+
+  return metierInteractionResponseSchema.parse(response);
 };
