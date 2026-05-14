@@ -9,10 +9,13 @@ const paginationMetaInputSchema = z
     totalPages: z.number().int().nonnegative(),
     sort: z.string().min(1).optional(),
   })
-  .refine(({ perPage, limit }) => perPage !== undefined || limit !== undefined, {
-    message: "Pagination metadata must include perPage or limit.",
-    path: ["perPage"],
-  });
+  .refine(
+    ({ perPage, limit }) => perPage !== undefined || limit !== undefined,
+    {
+      message: "Pagination metadata must include perPage or limit.",
+      path: ["perPage"],
+    },
+  );
 
 export const paginationMetaSchema = paginationMetaInputSchema.transform(
   ({ limit, perPage, ...meta }) => ({

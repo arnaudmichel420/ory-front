@@ -37,13 +37,17 @@ export default function LoginScreen() {
     mutationFn: (formValues: LoginPayload) => {
       return apiLogin(formValues);
     },
-    onSuccess: (response: LoginResponse) => {
+    onSuccess: async (response: LoginResponse) => {
       Toast.show({
         type: "success",
         text1: "Connexion avec succès",
       });
-      signIn(response.token);
-      router.replace(ROUTES.home);
+      await signIn(response.token, response.user);
+      router.replace(
+        response.user.etudiant?.onbording !== true
+          ? ROUTES.onboarding
+          : ROUTES.home,
+      );
     },
     onError: async (error) => {
       const message = await getErrorMessage(

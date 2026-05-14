@@ -1,15 +1,22 @@
 import {
   apiChangePassword,
-  apiGetEtudiantProfile,
   apiPatchEtudiantProfile,
   apiPutEtudiantProfile,
 } from "@/api/apiEtudiant";
 import { ControlledFormField } from "@/components/molecules/controlled-form-field";
-import { QueryGuard } from "@/components/molecules/query-guard";
+import { EtudiantProfileFields } from "@/components/organisms/etudiant-profile-fields";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 import { getErrorMessage } from "@/lib/get-error-message";
+import {
+  EMPTY_PROFILE_FORM,
+  ETUDIANT_PROFILE_QUERY_KEY,
+  getChangedProfileValues,
+  getProfileFormValues,
+  hasProfileChanges,
+} from "@/lib/etudiant-profile";
+import { ROUTES } from "@/lib/routes";
 import { useSessionStore } from "@/store/session";
 import {
   type ChangePasswordPayload,
@@ -20,24 +27,14 @@ import {
   etudiantProfileFormSchema,
 } from "@/types/etudiant";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { LogOutIcon } from "lucide-react-native";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CompassIcon, LogOutIcon } from "lucide-react-native";
+import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Pressable, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
-
-const ETUDIANT_PROFILE_QUERY_KEY = ["me", "etudiant"] as const;
-
-const EMPTY_PROFILE_FORM: EtudiantProfileFormValues = {
-  nom: "",
-  prenom: "",
-  adresse: "",
-  ville: "",
-  codePostal: "",
-  telephone: "",
-};
 
 const EMPTY_PASSWORD_FORM: ChangePasswordPayload = {
   currentPassword: "",
@@ -54,45 +51,12 @@ type SaveProfileVariables =
       values: EtudiantProfilePatchPayload;
     };
 
-function getProfileFormValues(
-  profile: EtudiantProfile | null | undefined,
-): EtudiantProfileFormValues {
-  if (!profile) {
-    return EMPTY_PROFILE_FORM;
-  }
-
-  return {
-    nom: profile.nom,
-    prenom: profile.prenom,
-    adresse: profile.adresse,
-    ville: profile.ville,
-    codePostal: profile.codePostal,
-    telephone: profile.telephone,
-  };
-}
-
-function getChangedProfileValues(
-  values: EtudiantProfileFormValues,
-  profile: EtudiantProfile,
-): EtudiantProfilePatchPayload {
-  return (
-    Object.keys(values) as Array<keyof EtudiantProfileFormValues>
-  ).reduce<EtudiantProfilePatchPayload>((payload, field) => {
-    if (values[field] !== profile[field]) {
-      payload[field] = values[field];
-    }
-
-    return payload;
-  }, {});
-}
-
-function hasProfileChanges(values: EtudiantProfilePatchPayload) {
-  return Object.keys(values).length > 0;
-}
-
 export default function AccountScreen() {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const signOut = useSessionStore.use.signOut();
+  const profileData = useSessionStore.use.etudiant();
+  const setEtudiant = useSessionStore.use.setEtudiant();
 
   const profileForm = useForm<EtudiantProfileFormValues>({
     resolver: zodResolver(etudiantProfileFormSchema),
@@ -104,22 +68,9 @@ export default function AccountScreen() {
     defaultValues: EMPTY_PASSWORD_FORM,
   });
 
-  const {
-    data: profileData,
-    isLoading: isProfileLoading,
-    error: profileError,
-  } = useQuery({
-    queryKey: ETUDIANT_PROFILE_QUERY_KEY,
-    queryFn: apiGetEtudiantProfile,
-  });
-
-  const profile = profileData ?? null;
+  const profile = profileData;
 
   useEffect(() => {
-    if (profileData === undefined) {
-      return;
-    }
-
     profileForm.reset(getProfileFormValues(profileData));
   }, [profileForm, profileData]);
 
@@ -133,14 +84,13 @@ export default function AccountScreen() {
     },
     onSuccess: (profile: EtudiantProfile, variables) => {
       queryClient.setQueryData(ETUDIANT_PROFILE_QUERY_KEY, profile);
+      setEtudiant(profile);
       profileForm.reset(getProfileFormValues(profile));
 
       Toast.show({
         type: "success",
         text1:
-          variables.mode === "create"
-            ? "Profil cree"
-            : "Profil mis a jour",
+          variables.mode === "create" ? "Profil cree" : "Profil mis a jour",
       });
     },
     onError: async (error) => {
@@ -239,70 +189,22 @@ export default function AccountScreen() {
         </View>
 
         <View className="gap-5">
-          <QueryGuard
-            queries={[
-              {
-                isLoading: isProfileLoading,
-                error: profileError,
-              },
-            ]}
-            loadingMessage="Chargement du profil..."
-            errorMessage="Impossible de charger votre profil pour le moment."
-            className="gap-5"
+          <Button
+            variant="outline"
+            onPress={() => {
+              router.push(ROUTES.onboarding);
+            }}
+            className="w-full rounded-xl"
           >
-            <View className="gap-4">
-              <ControlledFormField
-                control={profileForm.control}
-                name="nom"
-                label="Nom"
-                placeholder="Dupont"
-                autoCapitalize="words"
-                editable={!isProfileSaving}
-              />
-              <ControlledFormField
-                control={profileForm.control}
-                name="prenom"
-                label="Prenom"
-                placeholder="Alice"
-                autoCapitalize="words"
-                editable={!isProfileSaving}
-              />
-              <ControlledFormField
-                control={profileForm.control}
-                name="adresse"
-                label="Adresse"
-                placeholder="12 rue Victor Hugo"
-                textContentType="streetAddressLine1"
-                editable={!isProfileSaving}
-              />
-              <ControlledFormField
-                control={profileForm.control}
-                name="ville"
-                label="Ville"
-                placeholder="Paris"
-                autoCapitalize="words"
-                textContentType="addressCity"
-                editable={!isProfileSaving}
-              />
-              <ControlledFormField
-                control={profileForm.control}
-                name="codePostal"
-                label="Code postal"
-                placeholder="75001"
-                keyboardType="number-pad"
-                textContentType="postalCode"
-                editable={!isProfileSaving}
-              />
-              <ControlledFormField
-                control={profileForm.control}
-                name="telephone"
-                label="Telephone"
-                placeholder="0601020304"
-                keyboardType="phone-pad"
-                textContentType="telephoneNumber"
-                editable={!isProfileSaving}
-              />
-            </View>
+            <Icon as={CompassIcon} size={18} />
+            <Text>Refaire le questionnaire</Text>
+          </Button>
+
+          <View className="gap-5">
+            <EtudiantProfileFields
+              control={profileForm.control}
+              editable={!isProfileSaving}
+            />
 
             <Button
               onPress={onSubmitProfile}
@@ -313,7 +215,7 @@ export default function AccountScreen() {
                 {isProfileSaving ? "Enregistrement..." : "Enregistrer"}
               </Text>
             </Button>
-          </QueryGuard>
+          </View>
         </View>
 
         <View className="my-8 h-px bg-border" />

@@ -58,10 +58,7 @@ function removeSavedMetierFromPages(
   };
 }
 
-function MetierSaveButton({
-  codeOgr,
-  initialSaved,
-}: MetierSaveButtonProps) {
+function MetierSaveButton({ codeOgr, initialSaved }: MetierSaveButtonProps) {
   const colorScheme = useColorScheme();
   const theme = THEME[colorScheme === "dark" ? "dark" : "light"];
   const queryClient = useQueryClient();

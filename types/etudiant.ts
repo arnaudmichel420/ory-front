@@ -12,7 +12,10 @@ const VALIDATION_MESSAGES = {
     "Le mot de passe doit contenir une minuscule, une majuscule, un chiffre et un caractere special.",
 } as const;
 
-const requiredStringSchema = z.string().trim().min(1, VALIDATION_MESSAGES.required);
+const requiredStringSchema = z
+  .string()
+  .trim()
+  .min(1, VALIDATION_MESSAGES.required);
 
 const passwordSchema = z
   .string()
@@ -38,10 +41,12 @@ export const etudiantProfileSchema = z.object({
     .string()
     .trim()
     .regex(/^\d{10}$/, VALIDATION_MESSAGES.telephoneInvalid),
+  onbording: z.boolean(),
 });
 
 export const etudiantProfileFormSchema = etudiantProfileSchema.omit({
   id: true,
+  onbording: true,
 });
 
 export const etudiantProfilePatchSchema = etudiantProfileFormSchema.partial();
