@@ -332,7 +332,9 @@ function MetierFiltersSheet({
                       className="flex-row items-center justify-between gap-4 rounded-md border border-border px-3 py-3"
                     >
                       <View className="flex-1 flex-row items-center gap-3">
-                        <View className={`rounded-full p-2 ${wrapperClassName}`}>
+                        <View
+                          className={`rounded-full p-2 ${wrapperClassName}`}
+                        >
                           <FilterIcon size={16} className={iconClassName} />
                         </View>
                         <Text className="flex-1 text-sm font-medium">

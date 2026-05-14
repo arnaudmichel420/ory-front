@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { etudiantProfileSchema } from "@/types/etudiant";
 
 export const userSchema = z.object({
   id: z.number(),
@@ -6,7 +7,7 @@ export const userSchema = z.object({
   roles: z.array(z.string(), {
     message: "La liste des roles est invalide.",
   }),
-  etudiant: z.record(z.string(), z.unknown()).nullable(),
+  etudiant: etudiantProfileSchema.nullable(),
 });
 
 export type User = z.infer<typeof userSchema>;

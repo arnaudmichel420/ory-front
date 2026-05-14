@@ -6,6 +6,7 @@ import { ActivityIndicator, View } from "react-native";
 export default function Index() {
   const hasBootstrapped = useSessionStore.use.hasBootstrapped();
   const isAuthenticated = useSessionStore.use.isAuthenticated();
+  const onbording = useSessionStore.use.onbording();
 
   if (!hasBootstrapped) {
     return (
@@ -17,6 +18,10 @@ export default function Index() {
 
   if (!isAuthenticated) {
     return <Redirect href={ROUTES.login} />;
+  }
+
+  if (onbording === false) {
+    return <Redirect href={ROUTES.onboarding} />;
   }
 
   return <Redirect href={ROUTES.home} />;

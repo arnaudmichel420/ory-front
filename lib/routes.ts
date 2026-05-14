@@ -2,6 +2,7 @@ export const ROUTES = {
   root: "/" as const,
   login: "/login" as const,
   register: "/register" as const,
+  onboarding: "/onboarding" as const,
   home: "/home" as const,
   favoris: "/favoris" as const,
   metierDetail: (codeOgr: string) =>

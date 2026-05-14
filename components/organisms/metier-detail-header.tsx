@@ -18,7 +18,9 @@ type StatusChipProps = {
 
 function StatusChip({ icon, label, tone }: StatusChipProps) {
   return (
-    <View className={`flex-row items-center gap-2 rounded-full px-4 py-2 ${tone}`}>
+    <View
+      className={`flex-row items-center gap-2 rounded-full px-4 py-2 ${tone}`}
+    >
       <Icon as={icon} size={16} />
       <Text className="text-sm font-medium text-foreground">{label}</Text>
     </View>
@@ -79,7 +81,10 @@ function MetierDetailHeader({ metier }: MetierDetailHeaderProps) {
           ) : null}
         </View>
 
-        <MetierSaveButton codeOgr={metier.codeOgr} initialSaved={metier.saved} />
+        <MetierSaveButton
+          codeOgr={metier.codeOgr}
+          initialSaved={metier.saved}
+        />
       </View>
 
       {statusChips.length ? (
