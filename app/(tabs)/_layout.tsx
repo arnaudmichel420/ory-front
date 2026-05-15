@@ -5,6 +5,7 @@ import {
   HeartIcon,
   HouseIcon,
   SearchIcon,
+  SparklesIcon,
   UserIcon,
 } from "lucide-react-native";
 import { useColorScheme } from "nativewind";
@@ -12,6 +13,7 @@ import { useColorScheme } from "nativewind";
 const TAB_ICONS = {
   home: HouseIcon,
   metier: SearchIcon,
+  recommandations: SparklesIcon,
   favoris: HeartIcon,
   account: UserIcon,
 };
@@ -58,6 +60,13 @@ export default function TabsLayout() {
         options={{
           title: "Metiers",
           tabBarLabel: "Metiers",
+        }}
+      />
+      <Tabs.Screen
+        name="recommandations"
+        options={{
+          title: "Recommandations",
+          tabBarLabel: "Recommandes",
         }}
       />
       <Tabs.Screen

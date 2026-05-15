@@ -10,12 +10,16 @@ async function handleInvalidToken() {
   router.replace(ROUTES.root);
 }
 
+async function getAuthToken() {
+  return (await getItem(AUTH_TOKEN_KEY)) ?? useSessionStore.getState().token;
+}
+
 const api = ky.create({
   prefix: process.env.EXPO_PUBLIC_API_URL ?? "",
   hooks: {
     beforeRequest: [
       async ({ request }) => {
-        const token = await getItem(AUTH_TOKEN_KEY);
+        const token = await getAuthToken();
 
         if (token && !isTokenValid(token)) {
           await handleInvalidToken();
@@ -23,7 +27,10 @@ const api = ky.create({
         }
 
         if (token) {
-          request.headers.set("Authorization", `Bearer ${token}`);
+          const headers = new Headers(request.headers);
+          headers.set("Authorization", `Bearer ${token}`);
+
+          return new Request(request, { headers });
         }
       },
     ],

@@ -13,6 +13,7 @@ import {
   type MetierSavedListQuery,
   type MetierSaveToggleResponse,
   metierSaveToggleResponseSchema,
+  type MetierUserListQuery,
 } from "@/types/metier";
 
 export const apiListMetiers = async (
@@ -51,6 +52,21 @@ export const apiListSavedMetiers = async (
 ): Promise<MetierListResponse> => {
   const response = await api
     .get("api/me/metiers/saved", {
+      searchParams: createSearchParams({
+        page: query.page,
+        limit: query.limit,
+      }),
+    })
+    .json();
+
+  return metierListResponseSchema.parse(response);
+};
+
+export const apiListRecommendedMetiers = async (
+  query: MetierUserListQuery = {},
+): Promise<MetierListResponse> => {
+  const response = await api
+    .get("api/me/metiers/recommended", {
       searchParams: createSearchParams({
         page: query.page,
         limit: query.limit,

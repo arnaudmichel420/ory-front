@@ -52,6 +52,8 @@ export const metierSavedListQuerySchema = z.object({
   limit: z.number().int().positive().max(100).optional(),
 });
 
+export const metierUserListQuerySchema = metierSavedListQuerySchema;
+
 export const competenceSchema = z.object({
   codeOgr: z.string().nullable(),
   libelle: z.string().nullable(),
@@ -146,6 +148,7 @@ export type MetierSort = z.infer<typeof metierSortSchema>;
 export type MetierListQuery = z.infer<typeof metierListQuerySchema>;
 export type MetierListItem = z.infer<typeof metierListItemSchema>;
 export type MetierSavedListQuery = z.infer<typeof metierSavedListQuerySchema>;
+export type MetierUserListQuery = z.infer<typeof metierUserListQuerySchema>;
 export type SousDomaine = z.infer<typeof sousDomaineSchema>;
 export type Secteur = z.infer<typeof secteurSchema>;
 export type MetierSecteur = z.infer<typeof metierSecteurSchema>;
