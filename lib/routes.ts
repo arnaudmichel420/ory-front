@@ -5,6 +5,7 @@ export const ROUTES = {
   onboarding: "/onboarding" as const,
   home: "/home" as const,
   favoris: "/favoris" as const,
+  recommandations: "/recommandations" as const,
   metierDetail: (codeOgr: string) =>
     ({
       pathname: "/metier/[codeOgr]",
